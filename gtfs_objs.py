@@ -1,13 +1,17 @@
 import datetime
+from typing import List
 
 
 class GtfsItm:
-    def convert(self):
+
+    csv_header = ""
+
+    def get_csv_fields(self):
         raise Exception("Not Implemented Exception")
 
 
 class Agency(GtfsItm):
-    _csv_header = 'agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url'
+    csv_header = 'agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url'
 
     def __init__(self, agency_id, agency_name, agency_url, agency_timezone, agency_lang, agency_phone, agency_fare_url):
         self.agency_id = agency_id
@@ -18,14 +22,14 @@ class Agency(GtfsItm):
         self.agency_phone = agency_phone
         self.agency_fare_url = agency_fare_url
 
-    def convert(self):
+    def get_csv_fields(self):
 
         return [self.agency_id, self.agency_name, self.agency_url, self.agency_timezone, self.agency_lang,
                 self.agency_phone, self.agency_fare_url]
 
 
 class Calendar(GtfsItm):
-    _csv_header = 'service_id,sunday,monday,tuesday,wednesday,thursday,friday,saturday,start_date,end_date'
+    csv_header = 'service_id,sunday,monday,tuesday,wednesday,thursday,friday,saturday,start_date,end_date'
 
     def __init__(self, service_id, sunday=False, monday=False, tuesday=False, wednesday=False,
                  thursday=False, friday=False, saturday=False, start_date=None, end_date=None):
@@ -53,7 +57,7 @@ class Calendar(GtfsItm):
 
 
 class Route(GtfsItm):
-    _csv_header = 'route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color'
+    csv_header = 'route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color'
 
     def __init__(self, route_id, agency_id, route_short_name, route_long_name, route_desc, route_type, route_color):
         self.route_id = int(route_id)
@@ -74,7 +78,7 @@ class Route(GtfsItm):
 
 
 class Shape(GtfsItm):
-    _csv_header = 'shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence'
+    csv_header = 'shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence'
 
     def __init__(self, shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence):
         self.shape_id = int(shape_id)
@@ -84,7 +88,7 @@ class Shape(GtfsItm):
 
 
 class Stop(GtfsItm):
-    _csv_header = 'stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_station,zone_id'
+    csv_header = 'stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_station,zone_id'
     def __init__(self, stop_id, stop_code, stop_name, stop_desc, stop_lat, stop_lon, location_type, parent_station,
                  zone_id):
 
@@ -100,7 +104,7 @@ class Stop(GtfsItm):
 
 
 class StopTime(GtfsItm):
-    _csv_header = "trip_id,arrival_time,departure_time,stop_id,stop_sequence,pickup_type,drop_off_type," \
+    csv_header = "trip_id,arrival_time,departure_time,stop_id,stop_sequence,pickup_type,drop_off_type," \
                    "shape_dist_traveled"
 
     def __init__(self, trip_id, arrival_time, departure_time, stop_id, stop_sequence, pickup_type, drop_off_type,
@@ -117,7 +121,7 @@ class StopTime(GtfsItm):
 
 
 class Trip(GtfsItm):
-    _csv_header = 'route_id,service_id,trip_id,trip_headsign,direction_id,shape_id'
+    csv_header = 'route_id,service_id,trip_id,trip_headsign,direction_id,shape_id'
 
     def __init__(self, route_id, service_id, trip_id, trip_headsign, direction_id, shape_id):
         self.route_id = int(route_id)
@@ -126,3 +130,17 @@ class Trip(GtfsItm):
         self.trip_headsign = trip_headsign
         self.direction_id = int(direction_id)
         self.shape_id = int(shape_id)
+
+
+def gtfs_to_csv_file(itms: List[GtfsItm], f):
+    import csv
+    if len(itms) == 0:
+        return
+    writer = csv.writer(f)
+
+    itm = next(itms)
+    writer.writerow(itm.csv_header)
+    writer.writerow(itm.get_csv_fields())
+
+    for itm in itms:
+        writer.writerow(itm.get_csv_fields())
