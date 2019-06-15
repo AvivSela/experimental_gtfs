@@ -176,26 +176,26 @@ class GtfsCrudTests(unittest.TestCase):
 class ShapeTests(unittest.TestCase):
     def test__csv_header(self):
         expected = 'shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence'
-        self.assertEqual(expected, Shape._csv_header)
+        self.assertEqual(expected, Shape.csv_header)
 
 
 class StopTests(unittest.TestCase):
     def test__csv_header(self):
         expected = 'stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_station,zone_id'
-        self.assertEqual(expected, Stop._csv_header)
+        self.assertEqual(expected, Stop.csv_header)
 
 
 class StopTimeTests(unittest.TestCase):
     def test__csv_header(self):
         expected = "trip_id,arrival_time,departure_time,stop_id,stop_sequence,pickup_type,drop_off_type," \
                    "shape_dist_traveled"
-        self.assertEqual(expected, StopTime._csv_header)
+        self.assertEqual(expected, StopTime.csv_header)
 
 
 class TripTests(unittest.TestCase):
     def test__csv_header(self):
         expected = "route_id,service_id,trip_id,trip_headsign,direction_id,shape_id"
-        self.assertEqual(expected, Trip._csv_header)
+        self.assertEqual(expected, Trip.csv_header)
 
 
 class RouteTests(unittest.TestCase):
@@ -212,13 +212,13 @@ class RouteTests(unittest.TestCase):
 
     def test__csv_header(self):
         expected = 'route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color'
-        self.assertEqual(expected, Route._csv_header)
+        self.assertEqual(expected, Route.csv_header)
 
 
 class AgencyTests(unittest.TestCase):
     def test__csv_header(self):
         expected = 'agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url'
-        self.assertEqual(expected, Agency._csv_header)
+        self.assertEqual(expected, Agency.csv_header)
 
 
 class CalendarTests(unittest.TestCase):
@@ -231,7 +231,7 @@ class CalendarTests(unittest.TestCase):
 
     def test__csv_header(self):
         expected = 'service_id,sunday,monday,tuesday,wednesday,thursday,friday,saturday,start_date,end_date'
-        self.assertEqual(expected, Calendar._csv_header)
+        self.assertEqual(expected, Calendar.csv_header)
 
     def test_get_start_date(self):
 

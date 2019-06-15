@@ -3,9 +3,22 @@ import csv
 from gtfs_objs import Route, Agency, Calendar, Shape, Stop, StopTime, Trip
 
 
+class FileHandler:
+    def __init__(self, path):
+        self.path = path
+
+    def read(self):
+        with open(self.path, 'r', encoding='utf-8') as f:
+            next(f)
+            for row in csv.reader(f):
+                yield row
+
+
 class GtfsCrud:
-    def __init__(self, routes_file_handler, agency_file_handler, calendar_file_handler, shapes_file_handler,
-                 stops_file_handler, stop_times_file_handler, trips_file_handler):
+    def __init__(self, routes_file_handler: FileHandler, agency_file_handler: FileHandler,
+                 calendar_file_handler: FileHandler, shapes_file_handler: FileHandler, stops_file_handler: FileHandler,
+                 stop_times_file_handler: FileHandler, trips_file_handler: FileHandler):
+
         self.routes_file_handler = routes_file_handler
         self.agency_file_handler = agency_file_handler
         self.calendar_file_handler = calendar_file_handler
@@ -41,19 +54,6 @@ class GtfsCrud:
         return GtfsCrud._create_generator(self.trips_file_handler.read(), Trip)
 
 
-class FileHandler:
-    def __init__(self, path):
-        self.path = path
-
-    def read(self):
-        with open(self.path, 'r', encoding='utf-8') as f:
-            next(f)
-            for row in csv.reader(f):
-                yield row
-
-
 class GtfsManager:
     def __init__(self, gtfs_crud: GtfsCrud):
         self.gtfs_crud = gtfs_crud
-
-    

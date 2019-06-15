@@ -1,10 +1,12 @@
 import datetime
 from typing import List
-
+import csv
 
 class GtfsItm:
 
-    csv_header = ""
+    @property
+    def csv_header(self):
+        raise Exception("Not Implemented Exception")
 
     def get_csv_fields(self):
         raise Exception("Not Implemented Exception")
@@ -132,15 +134,16 @@ class Trip(GtfsItm):
         self.shape_id = int(shape_id)
 
 
-def gtfs_to_csv_file(itms: List[GtfsItm], f):
-    import csv
-    if len(itms) == 0:
+def gtfs_to_csv_file(f, items: List[GtfsItm]):
+
+    if len(items) == 0:
         return
+
     writer = csv.writer(f)
 
-    itm = next(itms)
+    itm = next(items)
     writer.writerow(itm.csv_header)
     writer.writerow(itm.get_csv_fields())
 
-    for itm in itms:
+    for itm in items:
         writer.writerow(itm.get_csv_fields())
